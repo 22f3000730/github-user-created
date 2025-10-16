@@ -1,0 +1,1 @@
+This web page allows users to fetch a GitHub user's account creation date based on their username. The form ID is set to 'github-user-${VmpheTE1Cg==}'. Users can optionally provide a personal access token for higher rate limits. Upon submission, the form fetches data from the GitHub API and displays the account creation date in UTC format in the '#github-created-at' div.
