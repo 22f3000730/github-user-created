@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub User Fetcher</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>GitHub User Fetcher</h1>
+        <form id="github-user-${VmpheTE1Cg==}">
+            <div class="form-group">
+                <label for="username">GitHub Username</label>
+                <input type="text" class="form-control" id="username" placeholder="Enter GitHub username" required>
+            </div>
+            <div class="form-group">
+                <label for="token">Personal Access Token (optional)</label>
+                <input type="text" class="form-control" id="token" placeholder="Enter your token">
+            </div>
+            <button type="submit" class="btn btn-primary">Fetch User Info</button>
+        </form>
+        <h3 class="mt-4">Account Creation Date:</h3>
+        <div id="github-created-at">Not fetched yet.</div>
+    </div>
+
+    <script>
+        document.getElementById('github-user-${VmpheTE1Cg==}').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const token = document.getElementById('token').value;
+            const url = `https://api.github.com/users/${username}${token ? '?access_token=' + token : ''}`;
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
+                .then(data => {
+                    const createdAt = new Date(data.created_at);
+                    const formattedDate = createdAt.toISOString().split('T')[0]; // YYYY-MM-DD
+                    document.getElementById('github-created-at').textContent = formattedDate + ' UTC';
+                })
+                .catch(error => {
+                    document.getElementById('github-created-at').textContent = 'Error fetching data';
+                });
+        });
+    </script>
+</body>
+</html>
