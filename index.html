@@ -20,15 +20,23 @@
             </div>
             <button type="submit" class="btn btn-primary">Fetch User Info</button>
         </form>
+        <div id="github-status" aria-live="polite" class="sr-only"></div>
         <h3 class="mt-4">Account Creation Date:</h3>
         <div id="github-created-at">Not fetched yet.</div>
     </div>
 
     <script>
+        // Set up status element reference
+        const statusElement = document.getElementById('github-status');
+        
         document.getElementById('github-user-${VmpheTE1Cg==}').addEventListener('submit', function(event) {
             event.preventDefault();
             const username = document.getElementById('username').value;
             const token = document.getElementById('token').value;
+            
+            // Report lookup start
+            statusElement.textContent = `Looking up information for GitHub user ${username}...`;
+            
             const url = `https://api.github.com/users/${username}${token ? '?access_token=' + token : ''}`;
 
             fetch(url)
@@ -40,9 +48,13 @@
                     const createdAt = new Date(data.created_at);
                     const formattedDate = createdAt.toISOString().split('T')[0]; // YYYY-MM-DD
                     document.getElementById('github-created-at').textContent = formattedDate + ' UTC';
+                    // Report success
+                    statusElement.textContent = `Successfully retrieved information for GitHub user ${username}.`;
                 })
                 .catch(error => {
                     document.getElementById('github-created-at').textContent = 'Error fetching data';
+                    // Report failure
+                    statusElement.textContent = `Failed to retrieve information for GitHub user ${username}.`;
                 });
         });
     </script>
